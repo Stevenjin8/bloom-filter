@@ -5,11 +5,18 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #include "bf.h"
 
 #define LN2 0.69314718056
+#define N_WORDS 370100
 
+/**
+ * Prints running time (in us), number of unfiltered items, size of array
+ * arguments are file with dictionary, number of hash functions.
+ * Array size is chosen automatically.
+ */
 int main(int argc, char **argv) {
     if (argc != 3) {
         fprintf(stderr, "Incorrect number of arguments.\n");
@@ -23,31 +30,35 @@ int main(int argc, char **argv) {
     }
 
     struct bloom_filter bf;
-    size_t n_words = 370100;
     size_t k = atoll(argv[2]);
-    size_t size = (size_t)((double) k * (double) n_words / LN2);
-    printf("Using array of size %lu.\n", size);
+    if (k == 0) {
+        fprintf(stderr, "atoll: %s\n", strerror(errno));
+        return 1;
+    }
+    size_t size = (size_t)((double)k * (double)N_WORDS / LN2);
     bf_init(&bf, size, k);
 
     char line[1024];
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
+        // Assume no errors
         bf_add(&bf, line);
     }
+    fclose(dictionary);
 
-    struct timeval start;
-    struct timeval end;
+    struct timeval start, end;
     size_t count = 0;
     gettimeofday(&start, DST_NONE);
     while (fgets(line, sizeof(line), stdin)) {
         // We can ignore trailing newline
         if (!bf_contains(&bf, line)) {
-            // Use straight syscall so we jump right into kernel mode and printf overhead
-            // is not part of the performance benchmarks.
             count++;
         }
     }
     gettimeofday(&end, DST_NONE);
-    printf("Took %ld microseconds\n", end.tv_usec - start.tv_usec);
-    printf("Found %lu duplicates\n", count);
+
+    // the diff in seconds should be small so we won't overflow.
+    size_t diff = (end.tv_sec - start.tv_sec) * 1000000 + end.tv_usec - start.tv_usec;
+    // Execution time, number of duplicates, number of hash functions, array size in bits.
+    printf("%ld,%lu,%lu,%lu\n", diff, count, k, size);
 }

@@ -26,8 +26,10 @@ int main(int argc, char **argv) {
     char line[1024];
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
+        // Assume this works
         trie_add(&trie, line);
     }
+    fclose(dictionary);
 
     struct timeval start;
     struct timeval end;
@@ -41,6 +43,6 @@ int main(int argc, char **argv) {
         }
     }
     gettimeofday(&end, DST_NONE);
-    printf("Took %ld microseconds\n", end.tv_usec - start.tv_usec);
-    printf("Found %lu duplicates\n", count);
+    size_t diff = (end.tv_sec - start.tv_sec) * 1000000 + end.tv_usec - start.tv_usec;
+    printf("%ld,%lu\n", diff, count);
 }

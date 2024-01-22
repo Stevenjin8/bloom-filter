@@ -2,6 +2,7 @@
 
 #include <memory.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 void trie_init(struct trie* trie) { memset(trie, 0, sizeof(*trie)); }
@@ -15,7 +16,7 @@ int trie_add(struct trie* trie, char* str) {
         return 1;
     }
 
-    unsigned char i = *str - 'a';
+    uint8_t i = *str - 'a';
     if (trie->next[i] == NULL) {
         trie->next[i] = malloc(sizeof(struct trie));
         trie_init(trie->next[i]);
