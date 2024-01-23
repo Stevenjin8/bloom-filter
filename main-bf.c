@@ -1,11 +1,11 @@
 #include <errno.h>
 #include <memory.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <stdint.h>
 
 #include "bf.h"
 
@@ -36,29 +36,35 @@ int main(int argc, char **argv) {
         return 1;
     }
     size_t size = (size_t)((double)k * (double)N_WORDS / LN2);
+    struct timeval insertion_start, insertion_end;
     bf_init(&bf, size, k);
 
     char line[1024];
+    gettimeofday(&insertion_start, DST_NONE);
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
         // Assume no errors
         bf_add(&bf, line);
     }
+    gettimeofday(&insertion_end, DST_NONE);
     fclose(dictionary);
 
-    struct timeval start, end;
+    struct timeval lookup_start, lookup_end;
     size_t count = 0;
-    gettimeofday(&start, DST_NONE);
+    gettimeofday(&lookup_start, DST_NONE);
     while (fgets(line, sizeof(line), stdin)) {
         // We can ignore trailing newline
         if (!bf_contains(&bf, line)) {
             count++;
         }
     }
-    gettimeofday(&end, DST_NONE);
+    gettimeofday(&lookup_end, DST_NONE);
 
     // the diff in seconds should be small so we won't overflow.
-    size_t diff = (end.tv_sec - start.tv_sec) * 1000000 + end.tv_usec - start.tv_usec;
+    size_t lookup_diff = (lookup_end.tv_sec - lookup_start.tv_sec) * 1000000 + lookup_end.tv_usec -
+                         lookup_start.tv_usec;
+    size_t insertion_diff = (lookup_end.tv_sec - lookup_start.tv_sec) * 1000000 +
+                            lookup_end.tv_usec - insertion_start.tv_usec;
     // Execution time, number of duplicates, number of hash functions, array size in bits.
-    printf("%ld,%lu,%lu,%lu\n", diff, count, k, size);
+    printf("%ld,%lu,%lu,%lu,%lu\n", lookup_diff, count, k, size, insertion_diff);
 }

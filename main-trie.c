@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
 
     char line[1024];
     size_t total = 0;
+    struct timeval insertion_start, insertion_end;
+    gettimeofday(&insertion_start, DST_NONE);
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
         // Assume this works
@@ -35,20 +37,24 @@ int main(int argc, char **argv) {
         }
         total = total + added;
     }
+    gettimeofday(&insertion_end, DST_NONE);
     fclose(dictionary);
 
-    struct timeval start;
-    struct timeval end;
+    struct timeval lookup_start, lookup_end;
     size_t count = 0;
-    gettimeofday(&start, DST_NONE);
+    gettimeofday(&lookup_start, DST_NONE);
     while (fgets(line, sizeof(line), stdin)) {
         // We can ignore trailing newline
         if (!trie_contains(&trie, line)) {
-            // write(1, line, strlen(line));
             count++;
         }
     }
-    gettimeofday(&end, DST_NONE);
-    size_t diff = (end.tv_sec - start.tv_sec) * 1000000 + end.tv_usec - start.tv_usec;
-    printf("%ld,%lu,%lu\n", diff, count, total);
+    gettimeofday(&lookup_end, DST_NONE);
+    size_t lookup_diff = (lookup_end.tv_sec - lookup_start.tv_sec) * 1000000 + lookup_end.tv_usec -
+                         lookup_start.tv_usec;
+    size_t insertion_diff = (lookup_end.tv_sec - lookup_start.tv_sec) * 1000000 +
+                            lookup_end.tv_usec - insertion_start.tv_usec;
+    printf("%ld,%lu,%lu,%lu\n", lookup_diff, count, total, insertion_diff);
+    // I should free the memory from the trie... 
+     
 }

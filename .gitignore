@@ -7,3 +7,4 @@ main-trie
 main-cc
 fig
 results
+*.core

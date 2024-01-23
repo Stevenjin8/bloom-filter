@@ -2,6 +2,11 @@
 
 #include <stdint.h>
 
+/**
+ * Inspired by djb2
+ * http://www.cse.yorku.ca/~oz/hash.html
+ * https://stackoverflow.com/questions/2351087/what-is-the-best-32bit-hash-function-for-short-strings-tag-names
+ */
 size_t hash(char *str, size_t h) {
     uint8_t *p;
 
@@ -12,6 +17,10 @@ size_t hash(char *str, size_t h) {
     return h;
 }
 
+/**
+ * Inspired by FNV hash
+ * http://www.isthe.com/chongo/tech/comp/fnv/index.html#google_vignette
+ */
 size_t hash2(char *str, size_t h) {
     uint8_t *p;
 
