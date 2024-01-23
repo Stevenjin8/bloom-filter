@@ -8,20 +8,22 @@
 void trie_init(struct trie* trie) { memset(trie, 0, sizeof(*trie)); }
 
 int trie_add(struct trie* trie, char* str) {
+    int total = 0;
     if (*str == '\0' || *str == '\n' || *str == '\r') {
         trie->end = true;
         return 0;
     }
     if (*str < 'a' || *str > 'z') {
-        return 1;
+        return -1;
     }
 
     uint8_t i = *str - 'a';
     if (trie->next[i] == NULL) {
         trie->next[i] = malloc(sizeof(struct trie));
+        total = total + sizeof(struct trie);
         trie_init(trie->next[i]);
     }
-    return trie_add(trie->next[i], str + 1);
+    return total + trie_add(trie->next[i], str + 1);
 }
 
 bool trie_contains(struct trie* trie, char* str) {

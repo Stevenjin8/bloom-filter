@@ -6,24 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SALT "zz"
-/**
- * str: the string to hash
- * h:   initial seed value
- *
- * stops at end of string or newline.
- *
- * https://stackoverflow.com/questions/2351087/what-is-the-best-32bit-hash-function-for-short-strings-tag-names
- */
-size_t hash(char *str, size_t h) {
-    uint8_t *p;
+#include "hash.h"
 
-    // thanks windows
-    for (p = (uint8_t *)str; (*p != '\0') && (*p != '\n') && (*p != '\r'); p++) {
-        h = 37 * h + *p;
-    }
-    return h;
-}
+#define SALT "zz"
 
 void bf_add(struct bloom_filter *bf, char *str) {
     // rather than starting with different values, keep adding to postfix

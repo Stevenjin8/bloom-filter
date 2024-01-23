@@ -4,5 +4,6 @@ words_alpha.txt
 *.o
 main-bf
 main-trie
+main-cc
 fig
 results

@@ -15,7 +15,6 @@
  */
 size_t hash(char *str, size_t h) {
     unsigned char *p;
-    h = h * h * h * h * h;
 
     // thanks windows
     for (p = (unsigned char *)str; (*p != '\0') && (*p != '\n') && (*p != '\r'); p++) {
