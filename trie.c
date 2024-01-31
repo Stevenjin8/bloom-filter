@@ -54,10 +54,3 @@ bool trie_contains(struct trie* trie, char* str) {
     return trie_contains(trie->next[i], str + 1);
 }
 
-/**
- * or not
- */
-void trie_free(struct trie* trie) {
-    for (size_t i = 0; i < ALPHA_LENGTH; i++) {
-    }
-}

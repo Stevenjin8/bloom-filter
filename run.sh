@@ -13,7 +13,7 @@ FILTER_TRIE_FILE="results/trie-filter"
 HP_TOKENIZED="./data/hp-tokenized"
 HP_UNIQUE="./data/hp-tokenized-unique"
 
-DICTIONARY="./words_alpha.txt"
+DICTIONARY="./data/words_alpha.txt"
 
 MAX_K=10
 

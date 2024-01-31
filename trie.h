@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-
 #define ALPHA_LENGTH 26
 
 struct trie {
@@ -16,4 +15,5 @@ void trie_init(struct trie* trie);
 int trie_add(struct trie* trie, char* str);
 
 bool trie_contains(struct trie* trie, char* str);
+
 #endif

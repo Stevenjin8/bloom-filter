@@ -7,3 +7,7 @@ hp-tokenized: hp-raw.txt
 
 hp-tokenized-unique: hp-raw.txt
 	python process.py 1 < hp-raw.txt > hp-tokenized-unique
+
+.PHONY: clean
+clean:
+	rm hp-tokenized-unique hp-tokenized

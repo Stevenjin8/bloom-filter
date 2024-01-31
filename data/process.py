@@ -1,7 +1,11 @@
 import sys
+
+import nltk
 from nltk.tokenize import word_tokenize
 
-text = sys.stdin.read()
+nltk.download("punkt")
+with open(0, "r", encoding="utf-8", errors="ignore") as f:
+    text = f.read()
 
 tokenized = (x.strip().lower() for x in word_tokenize(text) if x.isalpha() and x)
 if len(sys.argv) > 1:

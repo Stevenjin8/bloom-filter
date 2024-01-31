@@ -13,5 +13,5 @@ cd data
 make
 cd ..
 
-curl -O "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt"
+curl -o data/words_alpha.txt "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt"
 

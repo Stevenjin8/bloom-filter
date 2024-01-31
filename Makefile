@@ -16,13 +16,17 @@ main-bf: main-bf.c $(OBJS)
 main-trie: main-trie.c $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) main-trie.c -o main-trie
 
-.PHONY: clean run fig
+.PHONY: clean run fig setup
 
 clean:
-	rm -rf main-trie main-bf main-cc $(OBJS) fig/*.png
+	rm -rf main-trie main-bf main-cc $(OBJS) fig/*.png *.dSYM
 
 run: default
 	./run.sh
 
+setup: 
+	./setup.sh
+
 fig: main-trie main-bf make_graphs.py
+	mkdir -p fig
 	python make_graphs.py
