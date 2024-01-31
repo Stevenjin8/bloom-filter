@@ -9,9 +9,13 @@
 #define CC_HASH_SEED 1
 #define CC_LOOP_MAX 200000
 
+/**
+ * Initialize cuckoo filter
+ */
 struct cc_filter* cc_init(struct cc_filter* cc, size_t fingerprint_size, size_t log2_n_bins) {
     memset(cc, 0, sizeof(*cc));
     cc->fingerprint_mask = (1ull << fingerprint_size) - 1;
+    // Need ull because otherwise 1 is a 32-bit int and if raised to large power will overflow to 0.
     cc->n_bins = 1ull << log2_n_bins;
     // calloc sets everything to 0.
     if (!(cc->bins = calloc(sizeof(struct cc_bin), cc->n_bins))) {
@@ -20,6 +24,10 @@ struct cc_filter* cc_init(struct cc_filter* cc, size_t fingerprint_size, size_t 
     return cc;
 }
 
+/**
+ * Helper function.
+ * Does not error check.
+ */
 void cc_bin_add(struct cc_bin* bin, uint32_t fingerprint) {
     for (size_t i = bin->size; i > 0; i--) {
         bin->items[i] = bin->items[i - 1];
@@ -28,6 +36,10 @@ void cc_bin_add(struct cc_bin* bin, uint32_t fingerprint) {
     bin->size++;
 }
 
+/**
+ * Helper function.
+ * Does not error check.
+ */
 uint32_t cc_bin_remove(struct cc_bin* bin) {
     bin->size--;
     return bin->items[bin->size];

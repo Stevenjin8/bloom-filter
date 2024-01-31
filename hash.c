@@ -12,8 +12,7 @@ size_t hash(char *str, size_t h) {
 
     // thanks windows
     for (p = (uint8_t *)str; (*p != '\0') && (*p != '\n') && (*p != '\r'); p++) {
-        h = 37 * h + *p;
-    }
+        h = 37 * h + *p; }
     return h;
 }
 
@@ -34,6 +33,10 @@ size_t hash2(char *str, size_t h) {
     return h;
 }
 
+/**
+ * IDK how to hash a number.
+ * Just multiply by a prime
+ */
 size_t hash_n(size_t n) {
     return n * 37;
 }

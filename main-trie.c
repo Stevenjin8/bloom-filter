@@ -9,6 +9,7 @@
 #include "trie.h"
 
 int main(int argc, char **argv) {
+    // Parse arguments
     if (argc != 2) {
         fprintf(stderr, "Incorrect number of arguments.\n");
         return 1;
@@ -22,11 +23,12 @@ int main(int argc, char **argv) {
 
     struct trie trie;
     trie_init(&trie);
-
     char line[1024];
-    size_t total = 0;
+    size_t total = 0; // Number of bytes used
     struct timeval insertion_start, insertion_end;
     gettimeofday(&insertion_start, DST_NONE);
+
+    // Populate trie
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
         // Assume this works
@@ -43,6 +45,7 @@ int main(int argc, char **argv) {
     struct timeval lookup_start, lookup_end;
     size_t count = 0;
     gettimeofday(&lookup_start, DST_NONE);
+    // Run input through filter
     while (fgets(line, sizeof(line), stdin)) {
         // We can ignore trailing newline
         if (!trie_contains(&trie, line)) {

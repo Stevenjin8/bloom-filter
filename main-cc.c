@@ -11,6 +11,7 @@
 #include "hash.h"
 
 int main(int argc, char **argv) {
+    // Parse arguments
     if (argc != 4) {
         fprintf(stderr, "Incorrect number of arguments.\n");
         return 1;
@@ -41,6 +42,7 @@ int main(int argc, char **argv) {
 
     char line[1024];
     gettimeofday(&insertion_start, DST_NONE);
+    // Populate filter
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
         // Assume this works
@@ -55,6 +57,7 @@ int main(int argc, char **argv) {
     struct timeval lookup_start, lookup_end;
     size_t count = 0;
     gettimeofday(&lookup_start, DST_NONE);
+    // Run on input
     while (fgets(line, sizeof(line), stdin)) {
         // We can ignore trailing newline
         if (!cc_contains(&cc, line)) {
@@ -62,6 +65,7 @@ int main(int argc, char **argv) {
             count++;
         }
     }
+
     gettimeofday(&lookup_end, DST_NONE);
     size_t lookup_diff = (lookup_end.tv_sec - lookup_start.tv_sec) * 1000000 + lookup_end.tv_usec -
                          lookup_start.tv_usec;

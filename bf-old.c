@@ -23,6 +23,9 @@ size_t hash(char *str, size_t h) {
     return h;
 }
 
+/**
+ * Add element to bloom filter
+ */
 void bf_add(struct bloom_filter *bf, char *str) {
     for (size_t i = 0; i < bf->k; i++) {
         size_t index = hash(str, i) % bf->size;
@@ -30,6 +33,9 @@ void bf_add(struct bloom_filter *bf, char *str) {
     }
 }
 
+/**
+ * Initialize bloom filter
+ */
 void bf_init(struct bloom_filter *bf, size_t size, size_t k) {
     memset(bf, 0, sizeof(*bf));
     bf->size = size;
@@ -38,6 +44,9 @@ void bf_init(struct bloom_filter *bf, size_t size, size_t k) {
     memset(bf->filter, 0, size);
 }
 
+/**
+ * Check if Bloom Filter contains items
+ */
 bool bf_contains(struct bloom_filter *bf, char *str) {
     for (size_t i = 0; i < bf->k; i++) {
         size_t index = hash(str, i) % bf->size;

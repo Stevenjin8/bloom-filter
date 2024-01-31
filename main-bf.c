@@ -18,6 +18,7 @@
  * Array size is chosen automatically.
  */
 int main(int argc, char **argv) {
+    // Argument parsing
     if (argc != 3) {
         fprintf(stderr, "Incorrect number of arguments.\n");
         return 1;
@@ -41,6 +42,8 @@ int main(int argc, char **argv) {
 
     char line[1024];
     gettimeofday(&insertion_start, DST_NONE);
+
+    // Populate filter
     while (fgets(line, sizeof(line), dictionary)) {
         // We can ignore trailing newline
         // Assume no errors
@@ -52,8 +55,8 @@ int main(int argc, char **argv) {
     struct timeval lookup_start, lookup_end;
     size_t count = 0;
     gettimeofday(&lookup_start, DST_NONE);
+    // Run it through data
     while (fgets(line, sizeof(line), stdin)) {
-        // We can ignore trailing newline
         if (!bf_contains(&bf, line)) {
             count++;
         }
